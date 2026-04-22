@@ -71,50 +71,80 @@ public class WeatherAppGUI extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String userInput = searchField.getText();
-                
-                if (userInput.replaceAll("\\s", "").length() <= 0) {
-                    JOptionPane.showMessageDialog(null, "Please enter a location",
-                     "Error", JOptionPane.ERROR_MESSAGE);
-                    return; 
-                }
-                weatherData = WeatherApp.getWeatherData(userInput);
-
-                if (weatherData == null) {
-                    JOptionPane.showMessageDialog(null, "Unable to retrieve weather data. Please check the location and try again.",
-                     "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                String weatherCondition = (String) weatherData.get("weather_condition");
-
-                switch (weatherCondition) {
-                    case "Clear":
-                        weatherConditionImage.setIcon(loadImage("src/assets/clear.png"));
-                        break;
-                    case "Cloudy":
-                        weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png"));
-                        break;
-                    case "Rain":
-                        weatherConditionImage.setIcon(loadImage("src/assets/rain.png"));
-                        break;
-                    case "Snow":
-                        weatherConditionImage.setIcon(loadImage("src/assets/snow.png"));
-                        break;
-                }
-                double temperature = (double) weatherData.get("temperature");
-                temperatureText.setText(temperature + " C");
-
-                weatherConditionDesc.setText(weatherCondition);
-                
-                long humidity = (long) weatherData.get("humidity");
-                humidityText.setText("<html><b>Humidity</b> " + humidity + "%</html>");
-
-                double windSpeed = (double) weatherData.get("windspeed");
-                windSpeedText.setText("<html><b>WindSpeed</b> " + windSpeed + " km/h</html>");
+                performSearch();
             }
         });
         add(searchButton);
+
+        // Add ActionListener to searchField for Enter key
+        searchField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch();
+            }
+        });
+    }
+
+    private void performSearch() {
+        String userInput = searchField.getText();
+        
+        if (userInput.replaceAll("\\s", "").length() <= 0) {
+            JOptionPane.showMessageDialog(null, "Please enter a location",
+             "Error", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        weatherData = WeatherApp.getWeatherData(userInput);
+
+        if (weatherData == null) {
+            JOptionPane.showMessageDialog(null, "Unable to retrieve weather data. Please check the location and try again.",
+             "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String weatherCondition = (String) weatherData.get("weather_condition");
+
+        switch (weatherCondition) {
+            case "Clear":
+                weatherConditionImage.setIcon(loadImage("src/assets/clear.png"));
+                break;
+            case "Cloudy":
+                weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png"));
+                break;
+            case "Rain":
+                weatherConditionImage.setIcon(loadImage("src/assets/rain.png"));
+                break;
+            case "Snow":
+                weatherConditionImage.setIcon(loadImage("src/assets/snow.png"));
+                break;
+            case "Fog":
+                weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png")); // or fog image if available
+                break;
+            case "Drizzle":
+                weatherConditionImage.setIcon(loadImage("src/assets/rain.png"));
+                break;
+            case "Thunderstorm":
+                weatherConditionImage.setIcon(loadImage("src/assets/rain.png")); // or thunderstorm image
+                break;
+            default:
+                weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png"));
+                break;
+        }
+        double temperature = (double) weatherData.get("temperature");
+        temperatureText.setText(temperature + " C");
+
+        weatherConditionDesc.setText(weatherCondition);
+        
+        long humidity = (long) weatherData.get("humidity");
+        humidityText.setText("<html><b>Humidity</b> " + humidity + "%</html>");
+
+        Object windSpeedObj = weatherData.get("windspeed");
+        if (windSpeedObj != null) {
+            double windSpeed = (double) windSpeedObj;
+            windSpeedText.setText("<html><b>WindSpeed</b> " + windSpeed + " km/h</html>");
+        } else {
+            windSpeedText.setText("<html><b>WindSpeed</b> N/A</html>");
+        }
+    }
     }
 
     private ImageIcon loadImage(String path) {

@@ -23,7 +23,7 @@ public class WeatherApp {
         double longitude = (double) location.get("longitude");
 
         String url = "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude +
-         "&hourly=temperature_2m,relativehumidity_2m,weathercode,windspeed_10m&timezone=America%2FLos_Angeles";
+         "&hourly=temperature_2m,relativehumidity_2m,weathercode,windspeed_10m&timezone=auto";
 
         try {
 
@@ -52,20 +52,25 @@ public class WeatherApp {
                 JSONArray time = (JSONArray) hourly.get("time");
                 int index = findIndexOfCurrentTime(time);
                 JSONArray temperatureData = (JSONArray) hourly.get("temperature_2m");
+                if (temperatureData == null || temperatureData.size() <= index) return null;
                 double currentTemperature = (double) temperatureData.get(index);
 
                 JSONArray weatherCodeData = (JSONArray) hourly.get("weathercode");
+                if (weatherCodeData == null || weatherCodeData.size() <= index) return null;
                 String weatherCondition = weatherCodeToString((long) weatherCodeData.get(index));
 
                 JSONArray humidityData = (JSONArray) hourly.get("relativehumidity_2m");
+                if (humidityData == null || humidityData.size() <= index) return null;
                 long humidity = (long) humidityData.get(index);
                 JSONArray windSpeedData = (JSONArray) hourly.get("windspeed_10m");
-                double windSpeed = (double) windSpeedData.get(index);
                 JSONObject weatherData = new JSONObject();
                 weatherData.put("temperature", currentTemperature);
                 weatherData.put("weather_condition", weatherCondition);
                 weatherData.put("humidity", humidity);
-                weatherData.put("windspeed", windSpeed);
+                if (windSpeedData != null && windSpeedData.size() > index) {
+                    double windSpeed = (double) windSpeedData.get(index);
+                    weatherData.put("windspeed", windSpeed);
+                }
                 return weatherData;
         }catch (Exception e) {
             e.printStackTrace();
@@ -77,10 +82,10 @@ public class WeatherApp {
     private static String weatherCodeToString(long weatherCode) {
         String weatherCondition = "";
         if (weatherCode == 0L) {
-            weatherCondition = "Clear sky";
+            weatherCondition = "Clear";
         }
         else if (weatherCode == 1L || weatherCode == 2L || weatherCode == 3L) {
-            weatherCondition = "Partly cloudy";
+            weatherCondition = "Cloudy";
         }
         else if (weatherCode == 45L || weatherCode == 48L) {
             weatherCondition = "Fog";
