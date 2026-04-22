@@ -1,18 +1,80 @@
-## Getting Started
+# GhosTWeather
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Приложение для просмотра прогноза погоды с графическим интерфейсом (GUI).
 
-## Folder Structure
+## 📋 Описание
 
-The workspace contains two folders by default, where:
+GhosTWeather — это Java-приложение, которое позволяет пользователям получать информацию о текущей погоде и прогнозе. Приложение имеет удобный графический интерфейс и поддерживает работу с данными о температуре, влажности и других метеорологических показателях.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## 🚀 Быстрый старт
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+### Требования
+- Java 8 или выше
+- VS Code с расширением Extension Pack for Java
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+### Установка и запуск
 
-## Dependency Management
+1. Откройте проект в VS Code
+2. Скомпилируйте проект через команду Run (Ctrl+F5) или через встроенный Task Runner
+3. Запустите приложение через `AppLauncher.java`
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+### Запуск через JAR-файл
+
+Если у вас установлена JDK, вы можете запустить приложение из JAR-файла:
+
+```bash
+java -jar GhosTWeather.jar
+```
+
+или через командную строку:
+```bash
+java -cp GhosTWeather.jar AppLauncher
+```
+
+## 📁 Структура проекта
+
+```
+GhosTWeather/
+├── src/                          # Исходный код
+│   ├── AppLauncher.java         # Точка входа приложения
+│   ├── WeatherApp.java          # Логика приложения
+│   ├── WeatherAppGUI.java       # Графический интерфейс
+│   └── assets/                  # Ресурсы (изображения, шрифты)
+├── bin/                         # Скомпилированные файлы
+│   └── assets/
+├── lib/                         # Внешние библиотеки
+├── GhosTWeather.iml            # Конфигурация IntelliJ
+└── README.md                    # Этот файл
+```
+
+## 💻 Основные классы
+
+- **AppLauncher.java** — точка входа приложения, инициализирует GUI
+- **WeatherApp.java** — основная логика работы с данными о погоде
+- **WeatherAppGUI.java** — создание и управление графическим интерфейсом
+
+## 🔧 Разработка
+
+### Компиляция
+```bash
+javac -d bin -sourcepath src src/*.java
+```
+
+### Запуск
+```bash
+java -cp bin AppLauncher
+```
+
+## � Ресурсы
+
+Файлы в папке `assets/` (изображения, иконки и другие ресурсы) взяты из свободных источников и могут использоваться в соответствии с их лицензиями.
+
+## 📝 Лицензия и назначение
+
+⚠️ **Внимание:** Данное приложение предназначено **исключительно в образовательных целях**. Использование в коммерческих целях запрещено.
+
+MIT License
+
+## 👤 Автор
+
+Mr.GhosTMG Team
